@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Produto {
+id String @id @default(uuid()) @db.Uuid
+descricao String @db.VarChar(100)
+valor Decimal @db.Decimal(10,2)
+quantidadeEmEstoque Int @map("quantidade_em_estoque") @db.Integer
+tipoDoProduto String @map("tipo_do_produto")
+createdAt DateTime @default(now()) @map("created_at")
+disponivel Boolean? 
+
+@@map("produtos")
+}
+
+model Usuario {
+id String @id @default(uuid()) @db.Uuid
+nome String @db.VarChar(100)
+idade Int @db.Integer
+email String @map("tipo_do_produto") @unique
+password String @db.VarChar(20)
+linkDoGithub String? @map("link_do_github") 
+
+@@map("usuarios")
+}
+
+model Loja {
+  cnpj String @id
+  nome String @db.VarChar(100)
+  segmento String? @default("alimentação")
+  endereco String @db.Bit(100)
+  telefone String? @db.VarChar(20)
+  quantidadeDeFiliais Int @map("quantidade_de_filiais")
+  dataHoraAbertura DateTime @map("data_hora_abertura")
+
+  @@map("lojas")
+}
+
+model Fornecedor {
+  id String @id @default(uuid()) @db.Uuid
+  nome String @db.VarChar(100)
+  email String @db.VarChar(100)
+  avaliacao Int @db.Integer
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("fornecedores")
+}
